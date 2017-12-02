@@ -357,6 +357,16 @@ nfa_u regex_postfix_to_nfa(const std::string &postfix) {
   return fas.top();
 }
 
+nfa_u regex_to_nfa(const std::string &re) {
+  auto postfix = regex_infix_to_postfix(re);
+  return regex_postfix_to_nfa(postfix);
+}
+
+bool regex_match(const std::string &re, const std::string &str) {
+  nfa_u nfa = regex_to_nfa(re);
+  return nfa->recognize(str);
+}
+
 /*
  * tests
 */
@@ -457,6 +467,25 @@ void run_all_tests() {
 }
 
 int main(int argc, char *argv[]) {
-  run_all_tests();
+  // run_all_tests();
+
+  std::string re;
+
+  while (true) {
+    std::cout << "enter regex: ";
+    std::cin >> re;
+    std::cout << "regex: " << re << std::endl;
+
+    while (true) {
+      std::string str;
+      std::cout << "enter string: ";
+      std::cin >> str;
+
+      bool match = regex_match(re, str);
+
+      std::cout << (match == true ? "YES" : "NO") << std::endl;
+    }
+  }
+
   return 0;
 }
